@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.bluetoothcommunicator.MainActivity" >
+
+    <EditText
+        android:id="@+id/infoWindow"
+        android:layout_width="wrap_content"
+        android:layout_height="100px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="@string/info_win" />
+
+    <TextView
+        android:id="@+id/btView"
+        android:layout_width="wrap_content"
+        android:layout_height="100px"
+        android:layout_above="@+id/infoWindow"
+        android:layout_alignLeft="@+id/infoWindow"
+        android:layout_alignRight="@+id/infoWindow"
+        android:text="@string/hello_world" />
+
+    <ListView
+        android:id="@+id/deviceList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btView"
+        android:layout_alignLeft="@+id/btView"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/Connect" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/Connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/btView"
+        android:layout_alignTop="@+id/listView1"
+        android:layout_marginTop="30dp"
+        android:text="Connect" />
+
+</RelativeLayout>
