@@ -45,18 +45,15 @@ public class MainActivity extends Activity {
 
     public final Handler handler = new Handler() {
         @Override
-public void handleMessage(Message msg) {			  
-		Bundle bundle = msg.getData();
-		String string = bundle.getString("info");
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            String string = bundle.getString("info");
 		//TextView myTextView = (TextView)findViewById(R.id.infoWindow);
-		//myTextView.setText(string);
-                printInfo(string);
-	      }
-    
-    }
-            ;
+            //myTextView.setText(string);
+            printInfo(string);
+        }
 
-    
+    };
 
     ArrayList<LogWriter> logWriter;
 
@@ -77,15 +74,16 @@ public void handleMessage(Message msg) {
             return false;
         }
     }
-    synchronized void printInfo(String str)
-    {
-        String text = str+ "\n" + this.info.getText().toString();
-        if(text.length() > 2000) {
+
+    synchronized void printInfo(String str) {
+        String text = str + "\n" + this.info.getText().toString();
+        if (text.length() > 2000) {
             text = text.substring(0, 2000);
         }
-        
+
         this.info.setText(str);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,10 +102,6 @@ public void handleMessage(Message msg) {
 
         storageListView.setChoiceMode(CHOICE_MODE_SINGLE);
         storageListView.setAdapter(storageAdapter);
-        
-        
-        this.doTheAutoRefresh(50);
-        
 
         if (this.cardIsMounted()) {
             printInfo("External Storage Device was found");
@@ -152,16 +146,14 @@ public void handleMessage(Message msg) {
                         }
 
                         String filePath = storageDev.path + "/BluetoothLogger";
-                        
-                        
 
-                        LogWriter lw = new LogWriter(filePath,fileName, btd);
+                        LogWriter lw = new LogWriter(filePath, fileName, btd);
                         logWriter.add(lw);
                         lw.enableObserver((MainActivity) context);
-                        printInfo("started thread for logging "+btd.getName()+ " save in "+filePath);
+                        printInfo("started thread for logging " + btd.getName() + " save in " + filePath);
                         Thread thre = new Thread(lw);
                         thre.start();
-                        
+
                     }
                 });
 
@@ -206,27 +198,5 @@ public void handleMessage(Message msg) {
         }
 
     }
-    
-    
-    String lastReadLine = "";
-    
-    void doTheAutoRefresh(long time) {
-        handler.removeMessages(0);
-        handler.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                if(lastReadLine != "") {
-                    MainActivity.this.printInfo(MainActivity.this.lastReadLine);
-                    lastReadLine = "";
-                    MainActivity.this.doTheAutoRefresh(50);
-                }
-            }
-
-         }, time);
-    }
-
-    
-    
 
 }
