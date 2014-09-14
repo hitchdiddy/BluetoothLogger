@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,20 @@ public class MainActivity extends Activity {
     private Context context;
     private final static int REQUEST_ENABLE_BT = 1337;
 
+    public final Handler handler = new Handler() {
+        @Override
+public void handleMessage(Message msg) {			  
+		Bundle bundle = msg.getData();
+		String string = bundle.getString("info");
+		//TextView myTextView = (TextView)findViewById(R.id.infoWindow);
+		//myTextView.setText(string);
+                printInfo(string);
+	      }
+    
+    }
+            ;
+
+    
 
     ArrayList<LogWriter> logWriter;
 
@@ -63,7 +79,12 @@ public class MainActivity extends Activity {
     }
     synchronized void printInfo(String str)
     {
-        this.info.setText(this.info.getText()+ "\n" + str);
+        String text = str+ "\n" + this.info.getText().toString();
+        if(text.length() > 2000) {
+            text = text.substring(0, 2000);
+        }
+        
+        this.info.setText(str);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +104,10 @@ public class MainActivity extends Activity {
 
         storageListView.setChoiceMode(CHOICE_MODE_SINGLE);
         storageListView.setAdapter(storageAdapter);
+        
+        
+        this.doTheAutoRefresh(50);
+        
 
         if (this.cardIsMounted()) {
             printInfo("External Storage Device was found");
@@ -181,5 +206,27 @@ public class MainActivity extends Activity {
         }
 
     }
+    
+    
+    String lastReadLine = "";
+    
+    void doTheAutoRefresh(long time) {
+        handler.removeMessages(0);
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                if(lastReadLine != "") {
+                    MainActivity.this.printInfo(MainActivity.this.lastReadLine);
+                    lastReadLine = "";
+                    MainActivity.this.doTheAutoRefresh(50);
+                }
+            }
+
+         }, time);
+    }
+
+    
+    
 
 }
